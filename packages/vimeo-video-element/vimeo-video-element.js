@@ -140,6 +140,10 @@ class VimeoVideoElement extends MediaPlayedRangesMixin(globalThis.HTMLElement ??
   }
 
   set config(value) {
+    // Normalize undefined to null so config = undefined (e.g. from react-player)
+    // matches the null default and doesn't trigger an unnecessary reload. Needed
+    // because JSON.stringify(undefined) is undefined (not the string "null").
+    value ??= null;
     if (JSON.stringify(this.#config) === JSON.stringify(value)) return;
     this.#config = value;
     this.load();
